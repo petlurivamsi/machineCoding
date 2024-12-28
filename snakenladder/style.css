@@ -5,6 +5,10 @@
   font-family: "Roboto", serif;
 }
 
+.image-logo {
+  width: 10vh;
+  height: 10vh;
+}
 .gameContainer {
   display: flex;
   flex-direction: column;
