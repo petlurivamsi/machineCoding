@@ -3,6 +3,7 @@ export default function rollTheDice(diceId, userDetails) {
 
   // Generate a random dice value from 1 to 6
   const diceValue = Math.floor(Math.random() * 6) + 1;
+  //changed something
 
   // Define rotations for each side to show
   const rotations = {
