@@ -2,6 +2,7 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  font-family: "Roboto", serif;
 }
 
 .gameContainer {
@@ -31,16 +32,39 @@ main {
 #board-container {
   width: 70vw;
   /* display: grid; */
+  background: linear-gradient(
+      rgba(255, 255, 255, 0.8),
+      rgba(255, 255, 255, 0.8)
+    ),
+    url("https://img.freepik.com/free-vector/boardgame_1308-6525.jpg?t=st=1735388505~exp=1735392105~hmac=f88fd41784101656a8178388508caf7a95f4daeea527ab05e9e79c46b92d87a6&w=900");
+  opacity: 1;
+}
+
+.player {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
 }
 .board {
   height: 555px;
   width: 555px;
   margin: auto;
-  border: 1px solid black;
+  border: 1px solid rgb(0, 0, 0);
   display: grid;
   grid-template-rows: repeat(10, 1fr);
 
   /* grid-template-columns: repeat(10, 55.5px); */
+}
+
+button {
+  margin-top: 40px;
+  padding: 10px;
+  border-radius: 5%;
+  font-size: small;
+  background-color: #2596be;
+  color: #fff;
+  border: 1px solid white;
 }
 
 .row {
@@ -50,9 +74,62 @@ main {
   grid-template-columns: repeat(10, 1fr);
 }
 .cell {
-  border: 1px solid green;
+  border: 1px solid black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: larger;
+  font-weight: 500;
 }
 
 .cell-row {
   border: 1px solid black;
+}
+
+#dice-container,
+#dice-container-2 {
+  perspective: 1000px;
+  width: 100px;
+  height: 100px;
+  position: relative;
+}
+
+.dice {
+  width: 100px;
+  height: 100px;
+  position: relative;
+  transform-style: preserve-3d;
+  transform: rotateX(0deg) rotateY(0deg);
+  transition: transform 1s ease-in-out;
+}
+
+.side {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  background: white;
+  border: 2px solid black;
+  text-align: center;
+  line-height: 100px;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.front {
+  transform: rotateY(0deg) translateZ(50px);
+}
+.back {
+  transform: rotateY(180deg) translateZ(50px);
+}
+.right {
+  transform: rotateY(90deg) translateZ(50px);
+}
+.left {
+  transform: rotateY(-90deg) translateZ(50px);
+}
+.top {
+  transform: rotateX(90deg) translateZ(50px);
+}
+.bottom {
+  transform: rotateX(-90deg) translateZ(50px);
 }

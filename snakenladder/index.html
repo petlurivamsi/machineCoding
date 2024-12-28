@@ -5,143 +5,72 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Snake and Ladder game</title>
     <link rel="stylesheet" href="style.css" />
-    <script src="index.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Baloo+Bhaina+2:wght@400..800&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+      rel="stylesheet"
+    />
+    <script src="index.js" type="module"></script>
   </head>
   <body>
     <div class="gameContainer">
       <header>heading goes here</header>
       <main>
         <aside class="player player1" aria-label="Player 1 Details">
-          Left player details
+          <h3>Left player details</h3>
+          <div class="player-1-details">
+            <p class="player-1-name">Name-Priyanka</p>
+            <p class="player-1-turn">Turn</p>
+            <p class="player-1-current-value">
+              Current value-<span id="current-dice-value-1"></span>
+            </p>
+            <p class="player-1-current-position">Current position</p>
+          </div>
+          <div class="diceAndBtnContainer">
+            <div id="dice-container">
+              <div id="dice" class="dice">
+                <div class="side front">1</div>
+                <div class="side back">6</div>
+                <div class="side right">4</div>
+                <div class="side left">3</div>
+                <div class="side top">5</div>
+                <div class="side bottom">2</div>
+              </div>
+            </div>
+            <button onclick="rollTheDice('dice',1)">Roll the dice</button>
+          </div>
         </aside>
         <section id="board-container">
-          <div class="board">
-            <!-- <div class="row">
-              <div class="cell"></div>
-              <div class="cell"></div>
-              <div class="cell"></div>
-              <div class="cell"></div>
-              <div class="cell"></div>
-              <div class="cell"></div>
-              <div class="cell"></div>
-              <div class="cell"></div>
-              <div class="cell"></div>
-              <div class="cell"></div>
-            </div>
-            <div class="row">
-              <div class="cell"></div>
-              <div class="cell"></div>
-              <div class="cell"></div>
-              <div class="cell"></div>
-              <div class="cell"></div>
-              <div class="cell"></div>
-              <div class="cell"></div>
-              <div class="cell"></div>
-              <div class="cell"></div>
-              <div class="cell"></div>
-            </div>
-            <div class="row">
-              <div class="cell"></div>
-              <div class="cell"></div>
-              <div class="cell"></div>
-              <div class="cell"></div>
-              <div class="cell"></div>
-              <div class="cell"></div>
-              <div class="cell"></div>
-              <div class="cell"></div>
-              <div class="cell"></div>
-              <div class="cell"></div>
-            </div>
-            <div class="row">
-              <div class="cell"></div>
-              <div class="cell"></div>
-              <div class="cell"></div>
-              <div class="cell"></div>
-              <div class="cell"></div>
-              <div class="cell"></div>
-              <div class="cell"></div>
-              <div class="cell"></div>
-              <div class="cell"></div>
-              <div class="cell"></div>
-            </div>
-            <div class="row">
-              <div class="cell"></div>
-              <div class="cell"></div>
-              <div class="cell"></div>
-              <div class="cell"></div>
-              <div class="cell"></div>
-              <div class="cell"></div>
-              <div class="cell"></div>
-              <div class="cell"></div>
-              <div class="cell"></div>
-              <div class="cell"></div>
-            </div>
-            <div class="row">
-              <div class="cell"></div>
-              <div class="cell"></div>
-              <div class="cell"></div>
-              <div class="cell"></div>
-              <div class="cell"></div>
-              <div class="cell"></div>
-              <div class="cell"></div>
-              <div class="cell"></div>
-              <div class="cell"></div>
-              <div class="cell"></div>
-            </div>
-            <div class="row">
-              <div class="cell"></div>
-              <div class="cell"></div>
-              <div class="cell"></div>
-              <div class="cell"></div>
-              <div class="cell"></div>
-              <div class="cell"></div>
-              <div class="cell"></div>
-              <div class="cell"></div>
-              <div class="cell"></div>
-              <div class="cell"></div>
-            </div>
-            <div class="row">
-              <div class="cell"></div>
-              <div class="cell"></div>
-              <div class="cell"></div>
-              <div class="cell"></div>
-              <div class="cell"></div>
-              <div class="cell"></div>
-              <div class="cell"></div>
-              <div class="cell"></div>
-              <div class="cell"></div>
-              <div class="cell"></div>
-            </div>
-            <div class="row">
-              <div class="cell"></div>
-              <div class="cell"></div>
-              <div class="cell"></div>
-              <div class="cell"></div>
-              <div class="cell"></div>
-              <div class="cell"></div>
-              <div class="cell"></div>
-              <div class="cell"></div>
-              <div class="cell"></div>
-              <div class="cell"></div>
-            </div>
-            <div class="row">
-              <div class="cell"></div>
-              <div class="cell"></div>
-              <div class="cell"></div>
-              <div class="cell"></div>
-              <div class="cell"></div>
-              <div class="cell"></div>
-              <div class="cell"></div>
-              <div class="cell"></div>
-              <div class="cell"></div>
-              <div class="cell"></div>
-            </div> -->
-          </div>
+          <div class="board"></div>
         </section>
         <aside class="player player2" aria-label="Player 2 Details">
-          Right player details
+          <h3>Right player details</h3>
+          <div class="player-2-details">
+            <p class="player-2-name">Name-Vamsi</p>
+            <p class="player-2-turn">Turn</p>
+            <p class="player-2-current-value">
+              Current value-<span id="current-dice-value-2"></span>
+            </p>
+            <p class="player-2-current-position">Current position</p>
+          </div>
+          <div class="diceAndBtnContainer">
+            <div id="dice-container-2">
+              <div id="dice-2" class="dice">
+                <div class="side front">1</div>
+                <div class="side back">6</div>
+                <div class="side right">4</div>
+                <div class="side left">3</div>
+                <div class="side top">5</div>
+                <div class="side bottom">2</div>
+              </div>
+            </div>
+
+            <button onclick="rollTheDice('dice-2',2)">Roll the dice</button>
+          </div>
         </aside>
       </main>
+
       <footer>Footer goes here</footer>
     </div>
   </body>
