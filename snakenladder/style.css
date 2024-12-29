@@ -12,17 +12,31 @@ body {
 .image-logo {
   width: 10vh;
   height: 10vh;
+   box-shadow: 6px 6px 12px rgba(0, 0, 0, 0.3), -6px -6px 12px rgba(255, 255, 255, 0.7);
 }
 .gameContainer {
   display: flex;
   flex-direction: column;
-  border: 1px solid black;
   height: 100vh;
+  background: linear-gradient(
+      rgba(255, 255, 255, 0.9),
+      rgba(255, 255, 255, 0.9)
+    ),
+    url("https://img.freepik.com/free-vector/boardgame_1308-6525.jpg?t=st=1735388505~exp=1735392105~hmac=f88fd41784101656a8178388508caf7a95f4daeea527ab05e9e79c46b92d87a6&w=900");
 }
 
 header {
   height: 10vh;
   box-shadow: 6px 6px 12px rgba(0, 0, 0, 0.3), -6px -6px 12px rgba(255, 255, 255, 0.7);
+  display: grid;
+  grid-template-columns: .5fr 16fr;
+  align-items: center;
+}
+.header-title {
+    font-weight: 500;
+    text-align: center;
+    display: inline-block;
+    font-size: 1.5rem;
 }
 main {
   display: grid;
@@ -30,14 +44,9 @@ main {
 }
 
 #board-container {
-  background: linear-gradient(
-      rgba(255, 255, 255, 0.8),
-      rgba(255, 255, 255, 0.8)
-    ),
-    url("https://img.freepik.com/free-vector/boardgame_1308-6525.jpg?t=st=1735388505~exp=1735392105~hmac=f88fd41784101656a8178388508caf7a95f4daeea527ab05e9e79c46b92d87a6&w=900");
   opacity: 1;
   box-shadow: 6px 6px 12px rgba(0, 0, 0, 0.3), -6px -6px 12px rgba(255, 255, 255, 0.7);
-  padding-top: 20px;
+  margin-top: 3px;
 }
 
 .player {
@@ -46,7 +55,16 @@ main {
   justify-content: space-evenly;
   align-items: center;
   box-shadow: 6px 6px 12px rgba(0, 0, 0, 0.3), -6px -6px 12px rgba(255, 255, 255, 0.7);
+    padding: 0 10px;
+}
 
+.player-1-details,
+.player-2-details {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: stretch;
+    height: 15vh;
 }
 .board {
   margin: auto;
@@ -59,12 +77,17 @@ main {
 button {
   margin-top: 40px;
   padding: 10px;
-  border-radius: 5%;
-  font-size: small;
+  border-radius: 5px;
+  font-size: 1rem;
   background-color: #2596be;
   color: #fff;
   border: transparent;
+  margin-left: -10%;
   box-shadow: 6px 6px 12px rgba(0, 0, 0, 0.3), -6px -6px 12px rgba(255, 255, 255, 0.7);
+}
+.diceAndBtnContainer {
+    left: 10%;
+    transform: translateX(10%);
 }
 
 .row {
@@ -72,17 +95,13 @@ button {
   grid-template-columns: repeat(10, 1fr);
 }
 .cell {
-  border: 1px solid black;
+  border: 1px solid rgba(0, 0, 0, .3);
   display: flex;
   justify-content: center;
   align-items: center;
   font-size: larger;
   font-weight: 500;
   box-shadow: 6px 6px 12px rgba(0, 0, 0, 0.3), -6px -6px 12px rgba(255, 255, 255, 0.7);
-}
-
-.cell-row {
-  border: 1px solid black;
 }
 
 #dice-container,
@@ -103,21 +122,10 @@ button {
 }
 
 .side {
-  /* position: absolute;
-  width: 100px;
-  height: 100px;
-  background: white;
-  border: 2px solid black;
-  text-align: center;
-  line-height: 100px;
-  font-size: 24px;
-  font-weight: bold; */
-
   position: absolute;
     width: 70px;
     height: 70px;
     background: white;
-    /* border: transparent; */
     text-align: center;
     line-height: 70px;
     font-size: 24px;
@@ -142,4 +150,10 @@ button {
 }
 .bottom {
   transform: rotateX(-90deg) translateZ(50px);
+}
+
+.footer {
+    text-align: center;
+    padding: 20px;
+    box-shadow: 6px 6px 12px rgba(0, 0, 0, 0.3), -6px -6px 12px rgba(255, 255, 255, 0.7);
 }
