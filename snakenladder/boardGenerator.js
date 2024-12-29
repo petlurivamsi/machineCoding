@@ -25,9 +25,9 @@ const boardGenerator = () => {
       //   cellDiv.innerText = numberCount++;
       cellDiv.innerText = numberPositions[i][j];
       if (numberPositions[i][j] % 2 === 0) {
-        cellDiv.style.backgroundColor = "rgb(146, 229, 229)";
+        cellDiv.style.backgroundColor = "rgb(178, 234, 234)";
       } else {
-        cellDiv.style.backgroundColor = "rgb(246, 231, 213)";
+        cellDiv.style.backgroundColor = "rgb(243, 233, 221)";
       }
     }
   }

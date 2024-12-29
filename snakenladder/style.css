@@ -12,7 +12,7 @@ body {
 .image-logo {
   width: 10vh;
   height: 10vh;
-   box-shadow: 6px 6px 12px rgba(0, 0, 0, 0.3), -6px -6px 12px rgba(255, 255, 255, 0.7);
+  box-shadow: 6px 6px 12px rgba(0, 0, 0, 0.3), -6px -6px 12px rgba(255, 255, 255, 0.7);
 }
 .gameContainer {
   display: flex;
@@ -55,7 +55,7 @@ main {
   justify-content: space-evenly;
   align-items: center;
   box-shadow: 6px 6px 12px rgba(0, 0, 0, 0.3), -6px -6px 12px rgba(255, 255, 255, 0.7);
-    padding: 0 10px;
+  padding: 0 10px;
 }
 
 .player-1-details,
@@ -64,7 +64,7 @@ main {
     flex-direction: column;
     justify-content: space-between;
     align-items: stretch;
-    height: 15vh;
+    height: 18vh;
 }
 .board {
   margin: auto;
@@ -95,7 +95,7 @@ button {
   grid-template-columns: repeat(10, 1fr);
 }
 .cell {
-  border: 1px solid rgba(0, 0, 0, .3);
+  border: 1px solid rgba(0, 0, 0, .2);
   display: flex;
   justify-content: center;
   align-items: center;
