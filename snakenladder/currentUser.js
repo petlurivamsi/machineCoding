@@ -1,21 +1,28 @@
-export default function currentUser(userDetails, diceValue, userPosition) {
+let gameState = {
+  totalDiceValue: {},
+};
+
+const currentUser = (userDetails, diceValue, userPosition) => {
   console.log("::the current user ", userDetails);
   let users = [1, 2];
+  let currentUserIndex = users[userDetails - 1];
 
-  //   const turn = document.getElementById(`player-${userDetails}-turn`);
-  if (users[userDetails - 1] === 1) {
-    console.log("::came in 1 ", users[userDetails - 1]);
-    const turn = document.getElementById(
-      `player-${users[userDetails - 1]}-turn`
-    );
+  if (!gameState.totalDiceValue[userDetails]) {
+    gameState.totalDiceValue[userDetails] = 0;
+  }
+  gameState.totalDiceValue[userDetails] += parseInt(diceValue);
+
+  const currentPosition = document.getElementById(
+    `current-position-value-${userDetails}`
+  );
+  currentPosition.innerHTML = gameState.totalDiceValue[userDetails];
+
+  if (currentUserIndex === 1) {
+    console.log("::came in 1 ", currentUserIndex);
+    const turn = document.getElementById(`player-${currentUserIndex}-turn`);
     turn.innerHTML =
       turn.innerHTML === "false" || diceValue === 6 ? "true" : "false";
-    const btnClass = document.querySelector(
-      `.submit-btn-${users[userDetails - 1]}`
-    );
-    const currentPosition = document.getElementById(
-      `current-position-value-${users[userDetails - 1]}`
-    );
+    const btnClass = document.querySelector(`.submit-btn-${currentUserIndex}`);
     if (diceValue !== 6) {
       document.getElementById(`player-${users[userDetails]}-turn`).innerHTML =
         "true";
@@ -24,18 +31,14 @@ export default function currentUser(userDetails, diceValue, userPosition) {
         `.submit-btn-${users[userDetails]}`
       ).disabled = false;
     }
-  } else if (users[userDetails - 1] === 2) {
-    console.log("::came in 2 ", users[userDetails - 1]);
-    const turn = document.getElementById(
-      `player-${users[userDetails - 1]}-turn`
-    );
-    const btnClass = document.querySelector(
-      `.submit-btn-${users[userDetails - 1]}`
-    );
+  } else if (currentUserIndex === 2) {
+    console.log("::came in 2 ", currentUserIndex);
+    const turn = document.getElementById(`player-${currentUserIndex}-turn`);
+    const btnClass = document.querySelector(`.submit-btn-${currentUserIndex}`);
     turn.innerHTML =
       turn.innerHTML === "false" || diceValue === 6 ? "true" : "false";
     const currentPosition = document.getElementById(
-      `current-position-value-${users[userDetails - 1]}`
+      `current-position-value-${currentUserIndex}`
     );
     if (diceValue !== 6) {
       document.getElementById(
@@ -47,6 +50,6 @@ export default function currentUser(userDetails, diceValue, userPosition) {
       ).disabled = false;
     }
   }
-}
-
+};
+export default currentUser;
 // window.currentUser = currentUser;
