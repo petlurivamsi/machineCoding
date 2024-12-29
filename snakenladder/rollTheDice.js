@@ -1,8 +1,10 @@
-export default function rollTheDice(diceId, userDetails) {
+import currentUser from "./currentUser.js";
+export default function rollTheDice(diceId, userDetails, userPosition) {
   const dice = document.getElementById(diceId);
-
+  let user = 0;
   // Generate a random dice value from 1 to 6
   const diceValue = Math.floor(Math.random() * 6) + 1;
+
   //changed something
 
   // Define rotations for each side to show
@@ -17,14 +19,17 @@ export default function rollTheDice(diceId, userDetails) {
 
   // Apply random rotation to the dice
   dice.style.transform = rotations[diceValue];
+  console.log("::the dice value is ", dice);
 
   console.log("Dice rolled: " + diceValue); // For debugging
   const currentValue = document.getElementById(
     `current-dice-value-${userDetails}`
   );
-  console.log("current value ", currentValue);
+  const productElement = document.getElementsByClassName("side");
+  console.log("current value ", currentValue, productElement);
   //   currentValue.innerHTML = "";
   currentValue.innerHTML = diceValue;
 
   console.log("Dice clicked");
+  currentUser(userDetails, diceValue, userPosition);
 }

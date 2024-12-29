@@ -24,24 +24,31 @@
           <h3>Left player details</h3>
           <div class="player-1-details">
             <p class="player-1-name">Name-Priyanka</p>
-            <p class="player-1-turn">Turn</p>
+            <p class="player-1-turn">
+              Turn-<span id="player-1-turn">true</span>
+            </p>
             <p class="player-1-current-value">
               Current value-<span id="current-dice-value-1"></span>
             </p>
-            <p class="player-1-current-position">Current position</p>
+            <p class="player-1-current-position">
+              Current position-<span id="current-position-value-1"></span>
+            </p>
           </div>
+          <!-- @TODO: update the dice alignment on UI. -->
           <div class="diceAndBtnContainer">
             <div id="dice-container">
               <div id="dice" class="dice">
-                <div class="side front">1</div>
-                <div class="side back">6</div>
-                <div class="side right">4</div>
-                <div class="side left">3</div>
-                <div class="side top">5</div>
-                <div class="side bottom">2</div>
+                <div class="side front" data-dicevalue1="1">1</div>
+                <div class="side back" data-dicevalue1="6">6</div>
+                <div class="side right" data-dicevalue1="4">4</div>
+                <div class="side left" data-dicevalue1="3">3</div>
+                <div class="side top" data-dicevalue1="5">5</div>
+                <div class="side bottom" data-dicevalue1="2">2</div>
               </div>
             </div>
-            <button onclick="rollTheDice('dice',1)">Roll the dice</button>
+            <button onclick="rollTheDice('dice',1)" class="submit-btn-1">
+              Roll the dice
+            </button>
           </div>
         </aside>
         <section id="board-container">
@@ -51,25 +58,31 @@
           <h3>Right player details</h3>
           <div class="player-2-details">
             <p class="player-2-name">Name-Vamsi</p>
-            <p class="player-2-turn">Turn</p>
+            <p class="player-2-turn">
+              Turn-<span id="player-2-turn">false</span>
+            </p>
             <p class="player-2-current-value">
               Current value-<span id="current-dice-value-2"></span>
             </p>
-            <p class="player-2-current-position">Current position</p>
+            <p class="player-2-current-position">
+              Current position-<span id="current-position-value-2"></span>
+            </p>
           </div>
           <div class="diceAndBtnContainer">
             <div id="dice-container-2">
               <div id="dice-2" class="dice">
-                <div class="side front">1</div>
-                <div class="side back">6</div>
-                <div class="side right">4</div>
-                <div class="side left">3</div>
-                <div class="side top">5</div>
-                <div class="side bottom">2</div>
+                <div class="side front" data-dicevalue2="1">1</div>
+                <div class="side back" data-dicevalue2="6">6</div>
+                <div class="side right" data-dicevalue2="4">4</div>
+                <div class="side left" data-dicevalue2="3">3</div>
+                <div class="side top" data-dicevalue2="5">5</div>
+                <div class="side bottom" data-dicevalue2="2">2</div>
               </div>
             </div>
 
-            <button onclick="rollTheDice('dice-2',2)">Roll the dice</button>
+            <button class="submit-btn-2" onclick="rollTheDice('dice-2',2,)">
+              Roll the dice
+            </button>
           </div>
         </aside>
       </main>
