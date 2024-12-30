@@ -12,25 +12,18 @@ const boardGenerator = () => {
     [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
   ];
 
-  const boardDiv = document.querySelector(".board");
-  for (let i = 0; i < 10; i++) {
-    const rowDiv = document.createElement("div");
-    boardDiv.append(rowDiv);
-    rowDiv.setAttribute("class", "row");
-    for (let j = 0; j < 10; j++) {
-      // rowDiv.classList.add("row");
-      const cellDiv = document.createElement("div");
-      cellDiv.setAttribute("class", "cell");
-      rowDiv.appendChild(cellDiv);
-      //   cellDiv.innerText = numberCount++;
-      cellDiv.innerText = numberPositions[i][j];
-      if (numberPositions[i][j] % 2 === 0) {
-        cellDiv.style.backgroundColor = "rgb(178, 234, 234)";
-      } else {
-        cellDiv.style.backgroundColor = "rgb(243, 233, 221)";
+    const boardDiv = document.querySelector(".board");
+    const fragment = document.createDocumentFragment();
+    for (let i = 0; i < 10; i++) {
+      for (let j = 0; j < 10; j++) {
+        const cellDiv = document.createElement("div");
+        cellDiv.setAttribute("class", "cell");
+        cellDiv.innerText = numberPositions[i][j];
+        cellDiv.classList.add(numberPositions[i][j] % 2 === 0 ? "even" : "odd");
+        fragment.appendChild(cellDiv);
       }
     }
-  }
+    boardDiv.appendChild(fragment);
 };
 
 export default boardGenerator;

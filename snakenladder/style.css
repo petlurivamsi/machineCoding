@@ -73,7 +73,7 @@ main {
 .board {
   margin: auto;
   display: grid;
-  grid-template-rows: repeat(10, 1fr);
+  grid-template-columns: repeat(10, 1fr);
   padding: 15px;
   height: calc(100vh - 20vh);
 }
@@ -170,4 +170,10 @@ button:disabled {
   padding: 20px;
   box-shadow: 6px 6px 12px rgba(0, 0, 0, 0.3),
     -6px -6px 12px rgba(255, 255, 255, 0.7);
+}
+.even {
+    background-color: rgb(178, 234, 234);
+}
+.odd {
+    background-color: rgb(243, 233, 221);
 }
