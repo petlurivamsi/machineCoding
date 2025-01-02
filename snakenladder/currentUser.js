@@ -3,7 +3,7 @@ let gameState = {
 };
 
 const currentUser = (userDetails, diceValue, userPosition) => {
-  console.log("::the current user ", userDetails);
+  console.log("::the current user ", userDetails, window.outputArrForDiceCount);
   let users = [1, 2];
   let currentUserIndex = users[userDetails - 1];
 
@@ -12,6 +12,36 @@ const currentUser = (userDetails, diceValue, userPosition) => {
   }
   gameState.totalDiceValue[userDetails] += parseInt(diceValue);
 
+  const cellArray = document.getElementsByClassName("cell");
+  console.log("::cellArray ", cellArray);
+
+  // for (let element in cellArray) {
+  //   console.log("::element is ", cellArray[element]);
+  // }
+
+  const resetColors = Array.from(cellArray).filter((el) => {
+    return (
+      (userDetails === 2 && el.style.backgroundColor === "red") ||
+      (userDetails === 1 && el.style.backgroundColor === "green")
+    );
+  });
+
+  console.log("::resetColors ", resetColors);
+
+  for (let coloredDiv of resetColors) {
+    console.log("::coloredDiv ", coloredDiv.getAttribute("class"));
+    coloredDiv.style.backgroundColor =
+      coloredDiv.getAttribute("class") !== "cell even"
+        ? "rgb(243, 233, 221)"
+        : "rgb(178, 234, 234)";
+    console.log("::coloredDiv ", coloredDiv);
+  }
+  const filteredCell = Array.from(cellArray).find(
+    (el) => el.innerHTML == gameState.totalDiceValue[userDetails]
+  );
+
+  filteredCell.style.backgroundColor = userDetails === 1 ? "green" : "red";
+  console.log("::filteredcell ", filteredCell);
   const currentPosition = document.getElementById(
     `current-position-value-${userDetails}`
   );

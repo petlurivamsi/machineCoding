@@ -26,6 +26,11 @@ body {
     url("https://img.freepik.com/free-vector/boardgame_1308-6525.jpg?t=st=1735388505~exp=1735392105~hmac=f88fd41784101656a8178388508caf7a95f4daeea527ab05e9e79c46b92d87a6&w=900");
 }
 
+.even.highlightedCell,
+.odd.highlightedCell {
+  background-color: greenyellow;
+}
+
 header {
   height: 10vh;
   box-shadow: 6px 6px 12px rgba(0, 0, 0, 0.3),
@@ -94,6 +99,7 @@ button {
 
 button:disabled {
   background-color: grey;
+  cursor: not-allowed;
 }
 
 .diceAndBtnContainer {
@@ -172,8 +178,8 @@ button:disabled {
     -6px -6px 12px rgba(255, 255, 255, 0.7);
 }
 .even {
-    background-color: rgb(178, 234, 234);
+  background-color: rgb(178, 234, 234);
 }
 .odd {
-    background-color: rgb(243, 233, 221);
+  background-color: rgb(243, 233, 221);
 }

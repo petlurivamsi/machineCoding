@@ -7,7 +7,8 @@ window.onload = () => {
 
   // Call rollDice when you want to roll
   initialChecks();
-  boardGenerator();
+  const outputArrForDiceCount = boardGenerator();
+  window.outputArrForDiceCount = outputArrForDiceCount;
+  window.rollTheDice = rollTheDice;
+  return outputArrForDiceCount;
 };
-
-window.rollTheDice = rollTheDice;
