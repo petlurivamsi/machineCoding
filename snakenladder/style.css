@@ -15,6 +15,9 @@ body {
   box-shadow: 6px 6px 12px rgba(0, 0, 0, 0.3),
     -6px -6px 12px rgba(255, 255, 255, 0.7);
 }
+.heading {
+    text-align: center;
+}
 .gameContainer {
   display: flex;
   flex-direction: column;
@@ -182,4 +185,12 @@ button:disabled {
 }
 .odd {
   background-color: rgb(243, 233, 221);
+}
+.green {
+    background-color: green;
+     transition: all 1s .5s linear;
+}
+.red {
+    background-color: red;
+    transition: all 1s .5s linear;
 }

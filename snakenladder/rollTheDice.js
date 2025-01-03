@@ -19,17 +19,11 @@ export default function rollTheDice(diceId, userDetails, userPosition) {
 
   // Apply random rotation to the dice
   dice.style.transform = rotations[diceValue];
-  console.log("::the dice value is ", dice);
 
-  console.log("Dice rolled: " + diceValue); // For debugging
   const currentValue = document.getElementById(
     `current-dice-value-${userDetails}`
   );
   const productElement = document.getElementsByClassName("side");
-  console.log("current value ", currentValue, productElement);
-  //   currentValue.innerHTML = "";
   currentValue.innerHTML = diceValue;
-
-  console.log("Dice clicked");
   currentUser(userDetails, diceValue, userPosition);
 }

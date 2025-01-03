@@ -1,8 +1,6 @@
 import generateBoard from "./generateSnakePattern.js";
 const boardGenerator = () => {
   let numberPositions = generateBoard();
-  console.log(numberPositions);
-  console.log("::numberPositions ", numberPositions);
   const boardDiv = document.querySelector(".board");
   const fragment = document.createDocumentFragment();
   for (let i = 0; i < 10; i++) {

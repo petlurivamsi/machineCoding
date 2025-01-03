@@ -31,10 +31,10 @@ function generateSnakeBoardPattern(reversedArray) {
   for (let i = reversedArray.length - 1; i >= 0; i--) {
     outputArrForDiceCount.push(...reversedArray[i]);
     shouldSort ? reverseArray(reversedArray[i]) : reversedArray[i];
-    // console.log("::reversedArray[i] ", row);
+
     shouldSort = !shouldSort;
   }
-  console.log("::outputArrForDiceCount ", outputArrForDiceCount);
+
   return { reversedArray, outputArrForDiceCount };
 }
 
@@ -44,11 +44,7 @@ function generateBoard() {
   const generateSnakePatternAndOutputArr = generateSnakeBoardPattern(
     reverseTheGeneratedNumbers
   );
-  console.log(
-    "generateSnakePatternAndOutputArr ",
-    generateSnakePatternAndOutputArr
-  );
-  // console.log("::generateSnakePattern ", generateSnakePattern);
+
   return generateSnakePatternAndOutputArr;
 }
 
