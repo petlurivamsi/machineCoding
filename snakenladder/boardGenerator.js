@@ -1,4 +1,6 @@
 import generateBoard from "./generateSnakePattern.js";
+import trafficCone from "./trafficCone.js";
+
 const boardGenerator = () => {
   let numberPositions = generateBoard();
   const boardDiv = document.querySelector(".board");
@@ -14,7 +16,10 @@ const boardGenerator = () => {
       fragment.appendChild(cellDiv);
     }
   }
+
   boardDiv.appendChild(fragment);
+  trafficCone("green", 1);
+  trafficCone("red", 2);
 
   return numberPositions.outputArrForDiceCount;
 };

@@ -1,3 +1,7 @@
+// import trafficCone from "./trafficCone";
+
+import trafficCone from "./trafficCone.js";
+
 let gameState = {
   totalDiceValue: {},
 };
@@ -66,8 +70,21 @@ const currentUser = (userDetails, diceValue, userPosition) => {
 
   const cellArray = document.getElementsByClassName("cell");
   Array.from(cellArray).forEach((el) => {
-    userDetails === 1 && el.classList.remove("green");
-    userDetails === 2 && el.classList.remove("red");
+    // Check if the element has the 'green' or 'red' class
+    trafficCone(
+      "white", // Color of the traffic cone (remove if needed)
+      userDetails, // User identifier
+      `${userDetails === 1 ? ".green" : ".red"}`, // Select based on userDetails (green or red class)
+      true, // Clear the cone
+      "remove" // No longer needed, just pass true for remove functionality
+    );
+
+    // Remove the 'green' or 'red' class based on userDetails
+    if (userDetails === 1) {
+      el.classList.remove("green");
+    } else if (userDetails === 2) {
+      el.classList.remove("red");
+    }
   });
 
   const filteredCell = Array.from(cellArray).find(
@@ -75,6 +92,13 @@ const currentUser = (userDetails, diceValue, userPosition) => {
   );
 
   filteredCell.classList.add(userDetails === 1 ? "green" : "red");
+
+  trafficCone(
+    "white",
+    userDetails,
+    `${userDetails === 1 ? ".green" : ".red"}`,
+    false
+  );
 
   const currentPosition = document.getElementById(
     `current-position-value-${userDetails}`
@@ -112,4 +136,3 @@ const currentUser = (userDetails, diceValue, userPosition) => {
   }
 };
 export default currentUser;
-
