@@ -63,8 +63,8 @@ const currentUser = (userDetails, diceValue, userPosition) => {
       );
       currentDiceValue.innerText = "";
 
-      document.querySelector(".green").classList.remove("green");
-      document.querySelector(".red").classList.remove("red");
+      // document.querySelector(".green").classList.remove("green");
+      // document.querySelector(".red").classList.remove("red");
     });
   }
 
@@ -87,19 +87,21 @@ const currentUser = (userDetails, diceValue, userPosition) => {
     }
   });
 
+  console.log("::filteredCell is ", gameState);
   const filteredCell = Array.from(cellArray).find(
-    (el) => el.innerHTML == gameState.totalDiceValue[userDetails]
+    (el) => el.innerText == gameState.totalDiceValue[userDetails]
   );
 
   filteredCell.classList.add(userDetails === 1 ? "green" : "red");
 
   trafficCone(
-    "white",
+    `${userDetails === 1 ? "green" : "red"}`,
     userDetails,
     `${userDetails === 1 ? ".green" : ".red"}`,
     false
   );
 
+  confetti();
   const currentPosition = document.getElementById(
     `current-position-value-${userDetails}`
   );
