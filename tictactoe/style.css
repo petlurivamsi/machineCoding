@@ -1,0 +1,48 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.game-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.heading {
+  margin-bottom: 50px;
+}
+
+.player1-details,
+.player2-details {
+  border: 2px solid blue;
+}
+
+.main-container {
+  display: grid;
+  /* border: 2px solid green; */
+  grid-template-columns: 2fr 5fr 2fr;
+  gap: 100px;
+}
+
+.board-container {
+  display: grid;
+  border: 1px solid red;
+  padding: 5px;
+  height: 500px;
+  width: 500px;
+  grid-template-rows: repeat(3, 1fr);
+  grid-template-columns: repeat(3, 1fr);
+  margin: auto;
+  gap: 5px;
+}
+
+.cell {
+  display: grid;
+  place-items: center;
+  border: 1px solid black;
+  font-weight: bolder;
+  font-size: xx-large;
+}
