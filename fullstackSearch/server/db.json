@@ -1,0 +1,87 @@
+{
+  "posts": [
+    {
+      "id": "1",
+      "name": "post1",
+      "description": "description1"
+    },
+    {
+      "id": "2",
+      "name": "post2",
+      "description": "description2"
+    },
+    {
+      "id": "3",
+      "name": "post3",
+      "description": "description3"
+    },
+    {
+      "id": "6",
+      "name": "Lisa",
+      "description": "description6"
+    },
+    {
+      "id": "6",
+      "name": "Lisa",
+      "description": "description6"
+    },
+    {
+      "id": "7",
+      "name": "Mona",
+      "description": "description7"
+    },
+    {
+      "id": "8",
+      "name": "Mnika",
+      "description": "description8"
+    },
+    {
+      "id": "9",
+      "name": "user9",
+      "description": "description9"
+    },
+    {
+      "id": "11",
+      "name": "Post11"
+    },
+    {
+      "id": "12",
+      "name": "Post12"
+    },
+    {
+      "id": "13",
+      "name": "Post13",
+      "userId": "7ee8"
+    },
+    {
+      "id": "14",
+      "name": "Post14",
+      "userId": "7ee8"
+    },
+    {
+      "id": "15",
+      "name": "Post15",
+      "userId": "7ee8"
+    }
+  ],
+  "users": [
+    {
+      "id": "7ee8",
+      "name": "user10",
+      "email": "user10@gmail.com",
+      "password": 12345
+    },
+    {
+      "id": "9dff",
+      "name": "user13",
+      "email": "user13@gmail.com",
+      "password": 12345
+    },
+    {
+      "id": "a6fc",
+      "name": "user01@gmail.com",
+      "email": "user01@gmail.com",
+      "password": 12345
+    }
+  ]
+}
