@@ -16,10 +16,10 @@ export const addPosts = async (req, res) => {
       description,
       userId: req.userId,
     });
-
+    console.log("::response is ", response.data);
     if (response.data) {
       res.status(200).json({
-        message: `Posts ${id} added successfully`,
+        message: `Posts ${response.data.id} added successfully`,
       });
     }
   } catch (error) {
@@ -65,3 +65,5 @@ export const getPostById = async (req, res) => {
     });
   }
 };
+
+export const addComment = async (req, res) => {};
