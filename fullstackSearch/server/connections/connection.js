@@ -1,21 +1,20 @@
-// const mysql = require("mysql2");
-import mysql from "mysql2";
 
-const connection = mysql
-  .createConnection({
-    host: "127.0.0.1",
-    user: "root",
-    password: "",
-    database: "facebook",
-  })
-  .promise();
+import mysql from "mysql2/promise";
 
-connection.connect((err) => {
-  if (err) {
-    console.error("❌ Database connection failed:", err.stack);
-    return;
+let connection;
+
+const connectToDatabase = async () => {
+  if (!connection) {
+    connection = await mysql.createConnection({
+      host: "127.0.0.1",
+      user: "root",
+      password: "12345",
+      database: "facebook",
+    });
+    console.log("✅ Database connected successfully");
   }
-  console.log("✅ Database connected successfully as ID", connection.threadId);
-});
+  return connection;
+};
 
-export default connection;
+export default connectToDatabase;
+

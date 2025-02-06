@@ -1,11 +1,28 @@
 import axios from "axios";
 import jwt from "jsonwebtoken";
-import connection from "../connections/connection.js";
+import connectToDatabase from "../connections/connection.js";
+
+
 
 export const userRegister = async (req, res) => {
-  let { name, email, password } = req.body;
+  const {
+    firstName,
+    lastName,
+    username,
+    email,
+    user_role,
+    hashed_password,
+    school,
+    mobile,
+    dob,
+  } = req.body;
+
+  const user_profile_pic = req.file ? req.file.path : "";
+  const formattedDob = new Date(dob).toISOString().split("T")[0];
+  const imagePath = user_profile_pic.replace(/\\/g, "/"); // Correct file path format
+  const imageUrl = `http://localhost:8000/${imagePath}`;
   try {
-    const userData = await axios.get("http://localhost:3000/users");
+    const [userData] = await connection.query("Select * from users");
 
     const emailRegx = /^[\w\.-]+@[a-zA-Z0-9\.-]+\.[a-zA-Z]{2,}$/;
 
@@ -17,21 +34,33 @@ export const userRegister = async (req, res) => {
       });
     }
 
-    const userExists = userData.data.find((data) => data.email === email);
+    const userExists = userData.find((data) => data.Email === email);
     if (userExists) {
       return res.status(409).json({
         message: `User ${email} is already in use`,
       });
     }
-    let registerUser = await axios.post("http://localhost:3000/users", {
-      name,
+    const query = `INSERT INTO Users (firstName, lastName, username, email, user_role, hashed_password, school, mobile, dob, user_profile_pic)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+    const [result] = await connection.query(query, [
+      firstName,
+      lastName,
+      username,
       email,
-      password,
-    });
-
-    res.status(200).json({
+      user_role,
+      hashed_password,
+      school,
+      mobile,
+      formattedDob,
+      imageUrl,
+    ]);
+    const [newUser] = await req.dbConnection.query(
+      "SELECT * FROM Users WHERE id = ?",
+      [result.insertId]
+    );
+    return res.status(201).json({
       message: "User registered successfully",
-      registerUser: registerUser.data,
+      registerUser: newUser,
     });
   } catch (err) {
     console.log("err", err);
@@ -42,10 +71,17 @@ export const userRegister = async (req, res) => {
 };
 
 export const userLogin = async (req, res) => {
-  const { email, password } = req.body;
+    const { username, email, password } = req.body;
+
   try {
-    const registeredUsers = await axios.get("http://localhost:3000/users");
-    let userExists = registeredUsers.data.find((user) => user.email === email);
+    //const registeredUsers = await axios.get("http://localhost:3000/users");
+    const [registeredUsers] = await req.dbConnection.query(
+      "SELECT * FROM Users WHERE email = ?",
+      ["p07@gmail.com"]
+    );
+      let userExists = registeredUsers.find((user) => user.email === email);
+
+      console.log("userExists", userExists);
 
     const token = jwt.sign({ userId: userExists.id }, process.env.JWT_SECRET, {
       expiresIn: "1h",
@@ -55,7 +91,7 @@ export const userLogin = async (req, res) => {
       return res.status(404).json({
         message: "User not found with given email",
       });
-    } else if (userExists.password !== password) {
+    } else if (userExists.hashed_password !== password) {
       return res.status(401).json({
         message: "Password does not match",
       });
@@ -76,10 +112,8 @@ export const userLogin = async (req, res) => {
 export const displayDBUsers = async (req, res) => {
   try {
     const [rows] = await connection.query("Select * from users");
-    console.log("::response ", rows);
     res.json(rows);
   } catch (ex) {
-    console.log("exception is ", ex);
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
