@@ -4,22 +4,35 @@ import {
   userLogin,
   userRegister,
   displayDBUsers,
+  followers,
+  blockedUser,
+  editUserProfile,
 } from "../controllers/userController.js";
 import multer from "multer";
-import connectToDatabase from "../connections/connection.js";
+
 import { dbConnectionMiddleware } from "../middlewares/dbConnectionMiddleware.js";
+import verifyToken from "../auth.js";
 
 export const userRouter = express.Router();
 const upload = multer({ storage: storage });
 
-const connection = await connectToDatabase();
+
 userRouter.post(
   "/register",
-    upload.single("user_profile_pic", 10),
+    upload.single("user_profile_pic"),
   dbConnectionMiddleware,
   userRegister,
 );
+userRouter.put(
+    "/editProfile/:id",
+    verifyToken,
+  upload.single("user_profile_pic"),
+  dbConnectionMiddleware,
+  editUserProfile
+);
 userRouter.post("/login", dbConnectionMiddleware, userLogin);
+userRouter.post("/followers", verifyToken, dbConnectionMiddleware, followers);
+userRouter.post("/blockedUsers", verifyToken, dbConnectionMiddleware, blockedUser);
 userRouter.get("/displayUsers", dbConnectionMiddleware, displayDBUsers);
 
 

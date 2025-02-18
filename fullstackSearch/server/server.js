@@ -1,6 +1,5 @@
 import express from "express";
 import "dotenv/config";
-import multer from "multer";
 import bodyParser from "body-parser";
 import path from "path";
 import cors from "cors";
@@ -12,6 +11,7 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
+
 import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -20,10 +20,11 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 const PORT = 8000;
 
-// Basic route
-app.get("/", (req, res) => {
-  res.status(200).send("Hello World");
-});
+
+app.get('/data', (req, res) => {
+    const responseData = { message: 'Hello, world!' };
+    res.json(responseData);
+})
 
 // Register other routers
 app.use("/api/user", userRouter);
