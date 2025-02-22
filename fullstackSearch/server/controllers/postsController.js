@@ -1,3 +1,6 @@
+import { addPostImages } from "../utils.js";
+
+
 export const addPosts = async (req, res) => {
   const { title, body } = req.body;
   const userId = req.userId;
@@ -175,9 +178,6 @@ export const getPostById = async (req, res) => {
   }
 };
 
-//edit images
-//delete images
-
 export const addComment = async (req, res) => {
   const { description, postId, parentCommentId } = req.body;
   const userId = req.userId;
@@ -242,38 +242,88 @@ export const likesComment = async (req, res) => {
   }
 };
 
-export const postImages = async (req, res) => {
-  const { postId } = req.body;
-  const query = "Insert Into post_images (post_id, image_url) values(?,?)";
-  const image_urls = [];
-  req.files.forEach((file) => {
-    const imagePath = file.path.replace(/\\/g, "/"); // Correct file path format
-    const imageUrl = `http://localhost:8000/${imagePath}`;
-    image_urls.push(imageUrl);
-  });
-
-  try {
-    const insertPromises = image_urls.map(async (imageUrl) => {
-      return req.dbConnection.query(query, [postId, imageUrl]);
-    });
-
-    await Promise.all(insertPromises);
-
-    return res.status(200).json({
-      message: `Post image added Successfully`,
-      image_urls,
-      postId,
-    });
+// postImages function (only adds images)
+export const postImages = async (req, res, edit = false) => {
+    try {
+        const imgResp = await addPostImages(req, res)
+        const { status, message, image_urls, postId} = imgResp
+        return res.status(status).json({
+          message,
+          image_urls,
+          postId,
+        });
   } catch (err) {
+    console.error("Error adding post images:", err);
     return res.status(500).json({
       message: "Something went wrong while adding post images",
     });
   }
 };
 
+// editPostImages function (handles deletion and image addition)
 export const editPostImages = async (req, res) => {
+  const { deletionDetails, postId } = req.body;
+    const imageIds = deletionDetails && JSON.parse(deletionDetails);
+    const connection = await req.dbConnection.getConnection();
+    let imgResp;
+    const resObj = {};
 
-}
+  try {
+    await connection.beginTransaction();
+
+      // Step 1: Delete images
+      if (imageIds.length > 0) {
+           const deleteQuery = `DELETE FROM post_images WHERE id IN (${imageIds
+             .map(() => "?")
+             .join(", ")})`;
+           const [result] = await connection.execute(deleteQuery, [
+             ...imageIds,
+           ]);
+
+          resObj.deleteMessage = {
+              imageIds,
+            };
+        }
+
+    // Step 2: Add new images (if any uploaded)
+    if (req.files && req.files.length > 0) {
+        imgResp = await addPostImages(req, res, true);
+        if (imgResp) {
+          const { status, message, image_urls, postId } = imgResp;
+            resObj.editMessage = {
+              status,
+              message,
+              image_urls,
+              postId,
+            };
+        }
+    }
+
+    // Step 3: Commit the transaction if everything was successful
+      await connection.commit();
+
+    if (Object.keys(resObj).length === 0) {
+      return res.status(404).json({
+        message: "No info found for delete or edit images",
+      });
+    }
+
+    const status = imgResp ? imgResp.status : 200;
+
+    return res.status(status).json({
+        resObj,
+    });
+
+  } catch (err) {
+    await connection.rollback(); // Rollback if an error occurs
+    console.error("Error editing post images:", err);
+    return res.status(500).json({
+        message: "Something went wrong while editing post images",
+    });
+  } finally {
+    connection.release();
+  }
+};
 
 export const displayPosts = async (req, res) => {
     const { userId, type } = req.query;

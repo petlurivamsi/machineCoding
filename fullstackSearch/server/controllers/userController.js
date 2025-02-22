@@ -207,7 +207,6 @@ export const userLogin = async (req, res) => {
     );
       let userExists = registeredUsers.find((user) => user.email === email);
 
-      console.log("userExists", userExists);
 
     const token = jwt.sign({ userId: userExists.id }, process.env.JWT_SECRET, {
       expiresIn: "5h",

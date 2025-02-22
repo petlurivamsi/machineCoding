@@ -1,20 +1,22 @@
-
 import mysql from "mysql2/promise";
 
-let connection;
+// Create a connection pool (recommended)
+let pool;
 
 const connectToDatabase = async () => {
-  if (!connection) {
-    connection = await mysql.createConnection({
+  if (!pool) {
+    pool = mysql.createPool({
       host: "127.0.0.1",
       user: "root",
       password: "12345",
       database: "facebook",
+      waitForConnections: true,
+      connectionLimit: 10, // Adjust as needed
+      queueLimit: 0,
     });
     console.log("✅ Database connected successfully");
   }
-  return connection;
+  return pool;
 };
 
 export default connectToDatabase;
-
