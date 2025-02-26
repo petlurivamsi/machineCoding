@@ -1,0 +1,38 @@
+@import url("https://fonts.googleapis.com/css2?family=Baloo+Bhaina+2:wght@400..800&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap");
+:root {
+  --color-blue: #0866ff;
+  --color-white: #ffffff;
+}
+* {
+  box-sizing: border-box;
+  font-family: "Roboto", serif;
+  margin: 0;
+  padding: 0;
+}
+
+.fb-container {
+  border: 1px solid black;
+  display: grid;
+  grid-template-rows: 1fr auto;
+  width: 100%;
+  min-height: 100vh;
+
+  .headingAndLoginContainer {
+    width: 70%;
+    margin: auto;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    place-content: center;
+
+    .fb-heading {
+      color: var(--color-blue);
+      font-size: 3rem;
+    }
+    .fb-description {
+      font-size: large;
+    }
+    .headingAndDesc {
+      margin: 100px 10px 16px;
+    }
+  }
+}

@@ -30,7 +30,7 @@ CREATE TABLE `likes_comments` (
   KEY `liked_to_comment_id` (`liked_to_comment_id`),
   CONSTRAINT `likes_comments_ibfk_1` FOREIGN KEY (`liked_by_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
   CONSTRAINT `likes_comments_ibfk_2` FOREIGN KEY (`liked_to_comment_id`) REFERENCES `comments` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --

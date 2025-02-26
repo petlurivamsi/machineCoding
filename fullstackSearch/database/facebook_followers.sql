@@ -30,7 +30,7 @@ CREATE TABLE `followers` (
   KEY `followed_user_id` (`followed_by_user_id`),
   CONSTRAINT `followers_ibfk_1` FOREIGN KEY (`following_user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
   CONSTRAINT `followers_ibfk_2` FOREIGN KEY (`followed_by_user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
