@@ -1,5 +1,4 @@
-import { addPostImages } from "../utils.js";
-
+import {hasDuplicateImg } from "../utils.js";
 
 export const addPosts = async (req, res) => {
   const { title, body } = req.body;
@@ -11,7 +10,7 @@ export const addPosts = async (req, res) => {
       title,
       body,
       userId,
-      "live",
+      "Draft",
     ]);
 
     if (result.affectedRows > 0) {
@@ -24,12 +23,39 @@ export const addPosts = async (req, res) => {
 
 
   } catch (error) {
-    console.log("error", error);
+    console.log("Add Post Error", error);
     res.status(500).json({
       message: "Something went wrong while adding post",
     });
   }
 };
+
+export const approvePost = async (req, res) => {
+    const { postId, postStatus } = req.body;
+    const userId = req.userId;
+    const selectQuery = 'select * from users where id= ?';
+    try {
+        const [result] = await req.dbConnection.query(selectQuery, [userId]);
+        console.log("result", result, userId);
+        if (result[0].user_role === 'moderator') {
+            const [result] = await req.dbConnection.query('update posts SET post_status = ? where id = ?', [postStatus, postId]);
+
+            console.log('result inside try', result)
+
+            if (result.affectedRows > 0) {
+                return res.status(201).json({
+                    message: `Post ${postId} approved successfully`,
+                    postId: postId,
+                });
+            }
+        }
+    } catch (error) {
+        console.log("Approve Post Error", error);
+        res.status(500).json({
+            message: "Something went wrong while approving user",
+        });
+    }
+}
 
 export const editPost = async (req, res) => {
     const { id: postId } = req.params;
@@ -40,9 +66,6 @@ export const editPost = async (req, res) => {
         "SELECT * FROM Posts WHERE id = ?",
         [postId]
     );
-
-    // if the logged in user is owner of the post then he can edit
-    // else if logged in user is admin then he can edit the post
 
     // this call is only for to check if user is admin or not
      const [userData] = await req.dbConnection.query(
@@ -204,18 +227,118 @@ export const addComment = async (req, res) => {
   }
 };
 
+export const editComment = async(req, res) => {
+    const { description, commentId } = req.body;
+    const userId = req.userId;
+
+     const [userData] = await req.dbConnection.query(
+       "SELECT * FROM Users WHERE id = ?",
+       [userId]
+     );
+
+    const [commentData] = await req.dbConnection.query('Select * from comments where id = ?', [commentId])
+
+    console.log("commentData", commentData);
+     const isAdmin = userData[0].user_role === "admin" ? true : false;
+    const canEdit = isAdmin || commentData.user_id === userId;
+
+    const query = "Update comments SET description = ? WHERE id = ?";
+    try {
+        if (canEdit) {
+            const [result] = await req.dbConnection.query(query, [
+                description,
+                commentId,
+            ]);
+            console.log('result', result)
+            if (result.affectedRows > 0) {
+                res.status(200).json({
+                    message: `Comment ${commentId} edited successfully`
+                })
+            }
+        } else {
+            res.status(401).json({
+              message: `You are not authorized to edit the comment`,
+            });
+        }
+    } catch (err) {
+        console.log('Comment Error', err)
+        return res.status(500).json({
+          message: "Something went wrong while editing the comment",
+        });
+    }
+}
+
+export const deleteComment = async (req, res) => {
+  const { commentId } = req.body;
+  const userId = req.userId;
+
+  const [userData] = await req.dbConnection.query(
+    "SELECT * FROM Users WHERE id = ?",
+    [userId]
+  );
+
+  const [commentData] = await req.dbConnection.query(
+    "Select * from comments where id = ?",
+    [commentId]
+  );
+
+  const isAdmin = userData[0].user_role === "admin" ? true : false;
+  const canDelete = isAdmin || commentData.user_id === userId;
+
+  const query = "delete from comments WHERE id = ?";
+  try {
+    if (canDelete) {
+      const [result] = await req.dbConnection.query(query, [
+        commentId,
+      ]);
+
+      if (result.affectedRows > 0) {
+        res.status(200).json({
+          message: `Comment ${commentId} deleted successfully`,
+        });
+      }
+    } else {
+      res.status(401).json({
+        message: `You are not authorized to delete the comment`,
+      });
+    }
+  } catch (err) {
+      console.log("Comment Error", err);
+      return res.status(500).json({
+        message: "Something went wrong while deleting the comment",
+      });
+  }
+};
+
 export const likesPost = async (req, res) => {
   const { postId } = req.body;
   const userId = req.userId;
-  const query =
-    "INSERT INTO Likes_posts (liked_by_id, liked_to_post_id) VALUES (?,?)";
+  const insertQuery =
+      "INSERT INTO Likes_posts (liked_by_id, liked_to_post_id) VALUES (?,?)";
+    const selectQuery =
+        "select * from likes_posts where liked_by_id = ? and liked_to_post_id =?";
+    const deleteQuery =
+        "delete from likes_posts where liked_by_id= ? and liked_to_post_id =?";
+    let message;
   try {
-    await req.dbConnection.execute(query, [userId, postId]);
+      const [result] = await req.dbConnection.execute(selectQuery, [userId, postId]);
+      if (result.length > 0) {
+          await req.dbConnection.execute(deleteQuery, [
+              userId,
+              postId,
+          ]);
+        message = 'Post unliked successfully'
+      } else {
+          await req.dbConnection.execute(insertQuery, [userId, postId]);
+           message = "Post liked successfully";
+      }
+
     return res.status(200).json({
-      message: `Liked to post Successfully`,
+      message,
       userId,
       postId,
     });
+
   } catch (err) {
     return res.status(500).json({
       message: "Something went wrong while liking the post",
@@ -226,15 +349,32 @@ export const likesPost = async (req, res) => {
 export const likesComment = async (req, res) => {
   const { commentId } = req.body;
   const userId = req.userId;
-  const query =
-    "INSERT INTO Likes_comments (liked_by_id, liked_to_comment_id) VALUES (?,?)";
+    const insertQuery =
+      "INSERT INTO Likes_comments (liked_by_id, liked_to_comment_id) VALUES (?,?)";
+    const selectQuery =
+      "select * from Likes_comments where liked_by_id = ? and liked_to_comment_id =?";
+    const deleteQuery =
+      "delete from Likes_comments where liked_by_id= ? and liked_to_comment_id =?";
+    let message;
   try {
-    await req.dbConnection.execute(query, [userId, commentId]);
-    return res.status(200).json({
-      message: `Liked to comment Successfully`,
-      userId,
-      commentId,
-    });
+      const [result] = await req.dbConnection.execute(selectQuery, [
+        userId,
+        commentId,
+      ]);
+      if (result.length > 0) {
+        await req.dbConnection.execute(deleteQuery, [userId, commentId]);
+        message = "Comment unliked successfully";
+      } else {
+        await req.dbConnection.execute(insertQuery, [userId, commentId]);
+        message = "Comment liked successfully";
+      }
+
+      return res.status(200).json({
+        message,
+        userId,
+        commentId,
+      });
+
   } catch (err) {
     return res.status(500).json({
       message: "Something went wrong while liking the comment",
@@ -242,10 +382,65 @@ export const likesComment = async (req, res) => {
   }
 };
 
+const addPostImages = async (req, edit) => {
+  const { postId } = req.body;
+  const query = "INSERT INTO post_images (post_id, image_url) VALUES (?, ?)";
+  const image_urls = [];
+  const executeConnection = req.dbConnection;
+  let dbConnection;
+
+  // Check if there are any files uploaded
+  if (!req.files || req.files.length === 0) {
+    return {
+      status: 400,
+      message: "No images uploaded. Please upload at least one image.",
+    };
+  }
+
+  // Process the uploaded files
+  req.files.forEach((file) => {
+    const imagePath = file.path.replace(/\\/g, "/"); // Correct file path format
+    const imageUrl = `http://localhost:8000/${imagePath}`;
+    image_urls.push(imageUrl);
+  });
+
+  if (hasDuplicateImg(image_urls)) {
+    return { status: 409, message: "Duplicate items found" };
+  }
+
+  try {
+    dbConnection = await executeConnection.getConnection();
+
+    // Insert the images into the database
+    const insertPromises = image_urls.map(async (imageUrl) => {
+      return await dbConnection.execute(query, [postId, imageUrl]);
+    });
+
+    await Promise.all(insertPromises);
+
+    // Return success message and image URLs
+    return {
+      status: 200,
+      message: edit
+        ? "Post images edited successfully"
+        : "Post images added successfully",
+      image_urls,
+      postId,
+    };
+  } catch (error) {
+    console.log("add/edit images error:", error);
+    // Handle error gracefully
+    return {
+      status: 500,
+      message: "An error occurred while adding/editing images.",
+    };
+  }
+};
+
 // postImages function (only adds images)
-export const postImages = async (req, res, edit = false) => {
+export const postImages = async (req, res) => {
     try {
-        const imgResp = await addPostImages(req, res)
+        const imgResp = await addPostImages(req)
         const { status, message, image_urls, postId} = imgResp
         return res.status(status).json({
           message,
@@ -262,7 +457,7 @@ export const postImages = async (req, res, edit = false) => {
 
 // editPostImages function (handles deletion and image addition)
 export const editPostImages = async (req, res) => {
-  const { deletionDetails, postId } = req.body;
+  const { deletionDetails } = req.body;
     const imageIds = deletionDetails && JSON.parse(deletionDetails);
     const connection = await req.dbConnection.getConnection();
     let imgResp;
@@ -271,36 +466,31 @@ export const editPostImages = async (req, res) => {
   try {
     await connection.beginTransaction();
 
-      // Step 1: Delete images
-      if (imageIds.length > 0) {
-           const deleteQuery = `DELETE FROM post_images WHERE id IN (${imageIds
-             .map(() => "?")
-             .join(", ")})`;
-           const [result] = await connection.execute(deleteQuery, [
-             ...imageIds,
-           ]);
+    // Step 1: Delete images
+    if (imageIds.length > 0) {
+      const deleteQuery = `DELETE FROM post_images WHERE id IN (${imageIds
+        .map(() => "?")
+        .join(", ")})`;
+      const [result] = await connection.execute(deleteQuery, [...imageIds]);
 
-          resObj.deleteMessage = {
-              imageIds,
-            };
-        }
+      resObj.deleteMessage = {
+        imageIds,
+      };
+    }
 
     // Step 2: Add new images (if any uploaded)
     if (req.files && req.files.length > 0) {
-        imgResp = await addPostImages(req, res, true);
-        if (imgResp) {
-          const { status, message, image_urls, postId } = imgResp;
-            resObj.editMessage = {
-              status,
-              message,
-              image_urls,
-              postId,
-            };
-        }
+      imgResp = await addPostImages(req, true);
+      if (imgResp) {
+        const { status, message, image_urls, postId } = imgResp;
+        resObj.editMessage = {
+          status,
+          message,
+          image_urls,
+          postId,
+        };
+      }
     }
-
-    // Step 3: Commit the transaction if everything was successful
-      await connection.commit();
 
     if (Object.keys(resObj).length === 0) {
       return res.status(404).json({
@@ -310,8 +500,17 @@ export const editPostImages = async (req, res) => {
 
     const status = imgResp ? imgResp.status : 200;
 
+    if (status === 409) {
+      await connection.rollback();
+      return res.status(409).json({
+        message: "Duplicate images found",
+      });
+    }
+    // Step 3: Commit the transaction if everything was successful
+      await connection.commit();
+
     return res.status(status).json({
-        resObj,
+      resObj,
     });
 
   } catch (err) {

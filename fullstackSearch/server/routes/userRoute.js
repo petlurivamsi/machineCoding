@@ -7,6 +7,7 @@ import {
   followers,
   blockedUser,
   editUserProfile,
+  deleteUserProfile,
 } from "../controllers/userController.js";
 import multer from "multer";
 
@@ -29,6 +30,12 @@ userRouter.put(
   upload.single("user_profile_pic"),
   dbConnectionMiddleware,
   editUserProfile
+);
+userRouter.delete(
+  "/deleteUserProfile",
+  verifyToken,
+  dbConnectionMiddleware,
+  deleteUserProfile
 );
 userRouter.post("/login", dbConnectionMiddleware, userLogin);
 userRouter.post("/followers", verifyToken, dbConnectionMiddleware, followers);

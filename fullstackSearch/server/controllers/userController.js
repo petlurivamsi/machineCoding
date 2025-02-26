@@ -196,6 +196,37 @@ export const editUserProfile = async (req, res) => {
       }
 };
 
+export const deleteUserProfile = async (req, res) => {
+    const { id } = req.body;
+    const userId = req.userId;
+
+    const [userData] = await req.dbConnection.query('select * from users where id = ?', [userId])
+
+  const isAdmin = userData[0].user_role === "admin" ? true : false;
+  const canDelete = isAdmin || userId === id;
+
+  try {
+      if (canDelete) {
+          const [result] = await req.dbConnection.query("delete from users where id = ? ", [id]);
+          if (result.affectedRows > 0) {
+             return res.status(200).json({
+                message: `User id ${id} deleted successfully`
+              })
+          }
+      } else {
+         return res.status(401).json({
+            message: `User is not authorized to delete`,
+          });
+      }
+
+  } catch (err) {
+      console.log("Delete user profile", err);
+      return res.status(500).json({
+        message: "Something went wrong while deleting user profile",
+      });
+  }
+};
+
 export const userLogin = async (req, res) => {
     const { username, email, password } = req.body;
 
@@ -206,7 +237,6 @@ export const userLogin = async (req, res) => {
       [email]
     );
       let userExists = registeredUsers.find((user) => user.email === email);
-
 
     const token = jwt.sign({ userId: userExists.id }, process.env.JWT_SECRET, {
       expiresIn: "5h",
@@ -233,7 +263,7 @@ export const userLogin = async (req, res) => {
     }
   } catch (err) {
     console.log("err", err);
-    res.status(500).json({
+    return res.status(500).json({
       message: "Something went wrong while user login",
     });
   }
@@ -251,20 +281,33 @@ export const displayDBUsers = async (req, res) => {
 export const followers = async (req, res) => {
     const { followingUserId } = req.body;
     const followedByUserId = req.userId;
-    console.log("followedByUserId", followedByUserId);
-    const query = 'Insert Into Followers (following_user_id, followed_by_user_id) Values (?,?)'
-    try {
-        await req.dbConnection.query(query, [
-          followingUserId,
-          followedByUserId,
-        ]);
 
-        return res.status(200).json({
-          message: `User ${followingUserId} id followed successfully`,
-          followingUserId,
-          followedByUserId,
-        });
-    } catch (err) {
+     const insertQuery =
+      "INSERT INTO Followers (followed_by_user_id, following_user_id) VALUES (?,?)";
+    const selectQuery =
+        "select * from Followers where followed_by_user_id = ? and following_user_id =?";
+    const deleteQuery =
+        "delete from Followers where followed_by_user_id= ? and following_user_id =?";
+    let message;
+  try {
+      const [result] = await req.dbConnection.execute(selectQuery, [followedByUserId, followingUserId]);
+      if (result.length > 0) {
+          await req.dbConnection.execute(deleteQuery, [
+              followedByUserId,
+              followingUserId,
+          ]);
+        message = `User id ${followingUserId} unfollowed successfully`;
+      } else {
+          await req.dbConnection.execute(insertQuery, [followedByUserId, followingUserId]);
+          message = `User id ${followingUserId} followed successfully`;
+      }
+
+    return res.status(200).json({
+      message,
+      followedByUserId,
+      followingUserId,
+    });
+  } catch (err) {
         console.log("err", err);
         res.status(500).json({
             message: "Something went wrong while following to user",
@@ -274,14 +317,29 @@ export const followers = async (req, res) => {
 
 export const blockedUser = async (req, res) => {
   const { blockedUserId } = req.body;
-  const userId = req.userId;
-  const query =
-    "Insert Into blockedUsers (user_id, blocked_user_id) Values(?,?)";
+    const userId = req.userId;
+    const insertQuery =
+      "INSERT INTO blockedUsers (user_id, blocked_user_id) VALUES (?,?)";
+    const selectQuery =
+        "select * from blockedUsers where user_id = ? and blocked_user_id =?";
+    const deleteQuery =
+        "delete from blockedUsers where user_id= ? and blocked_user_id =?";
+    let message;
   try {
-    await req.dbConnection.query(query, [userId, blockedUserId]);
+      const [result] = await req.dbConnection.execute(selectQuery, [userId, blockedUserId]);
+      if (result.length > 0) {
+          await req.dbConnection.execute(deleteQuery, [
+              userId,
+              blockedUserId,
+          ]);
+        message = `User id ${blockedUserId} blocked successfully`;
+      } else {
+          await req.dbConnection.execute(insertQuery, [userId, blockedUserId]);
+          message = `User id ${blockedUserId} unblocked successfully`;
+      }
 
     return res.status(200).json({
-      message: `User ${blockedUserId} id blocked successfully`,
+      message,
       userId,
       blockedUserId,
     });
