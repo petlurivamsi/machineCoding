@@ -4,7 +4,7 @@
   "description": "Facebook clone app",
   "main": "index.js",
   "scripts": {
-    "start": "webpack serve --mode development --open",
+    "start": "webpack serve --mode development --open --hot",
     "build": "webpack --mode production",
     "dev": "webpack serve --mode development --hot",
     "watch": "webpack --mode development --watch"
@@ -32,6 +32,7 @@
     "webpack-dev-server": "^5.2.0"
   },
   "dependencies": {
+    "bootstrap-icons": "^1.11.3",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   }

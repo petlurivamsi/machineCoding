@@ -10,6 +10,14 @@
   padding: 0;
 }
 
+.container {
+  /* height: 100vh; */
+  /* border: 2px solid green; */
+  display: grid;
+  place-items: center;
+  background-color: #f2f4f7;
+}
+
 .fb-container {
   border: 1px solid black;
   display: grid;
@@ -24,10 +32,10 @@
     grid-template-columns: repeat(2, 1fr);
     place-content: center;
 
-    .fb-heading {
+    /* .fb-heading {
       color: var(--color-blue);
       font-size: 3rem;
-    }
+    } */
     .fb-description {
       font-size: large;
     }
@@ -35,4 +43,11 @@
       margin: 100px 10px 16px;
     }
   }
+}
+.fb-heading {
+  color: var(--color-blue);
+  font-size: 3rem;
+}
+.registerHeadingAndContainer {
+  width: 400px;
 }

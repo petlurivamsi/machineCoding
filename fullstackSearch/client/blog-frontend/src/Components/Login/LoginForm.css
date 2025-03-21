@@ -10,8 +10,6 @@
   .loginForm {
     padding: 15px;
     display: grid;
-    /* width: 70%;
-    margin: auto; */
     gap: 10px;
     .inputField {
       padding: 15px;

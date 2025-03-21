@@ -1,13 +1,14 @@
 import React from "react";
 import LoginForm from "../Components/Login/LoginForm";
 import Footer from "../Components/Footer/Footer";
+import Heading from "../Components/Heading/Heading";
 
 const Welcome: React.FC = () => {
   return (
     <div className="fb-container">
       <div className="headingAndLoginContainer">
         <div className="headingAndDesc">
-          <h1 className="fb-heading">facebook</h1>
+          <Heading />
           <p className="fb-description">
             Facebook helps you connect and share with the people in your life.
           </p>
